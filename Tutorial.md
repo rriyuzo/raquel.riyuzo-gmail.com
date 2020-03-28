@@ -23,9 +23,14 @@ O QIIME2 usa dois tipos diferentes de arquivos:
 - .qzv são arquivos para visualizações. Todos os arquivos QIIME2 podem ser visualizados usando um navegador on-line disponível em https://view.qiime2.org .
 
 # Importando dados
-Podemos importar os dados de diversas maneiras. Aqui vou exemplificar a importação de single reads multiplex. Para isso, crie um diretório “sequences” e baixes os dois arquivos ###########
+Podemos importar os dados de diversas maneiras. Aqui vou exemplificar a importação de single reads multiplex. Para isso, copie o diretório /home/ubuntu/sequences/ .  Aproveite para copiar o diretório /outros_dados, ele também será útil em breve. 
 
-Após o Download dos arquivos utilize esse comando para importar os dados:
+```
+cp -r /home/ubuntu/sequences/ /seu_diretorio
+cp -r /home/ubuntu/outros_dados/ /seu_diretorio
+```
+
+Agora, vamos importar os dados para o ambiente QIIME:
  
 ```
 qiime tools import \
@@ -33,7 +38,7 @@ qiime tools import \
   --input-path sequences \
   --output-path sequences.qza
 ```
-Agora, precisamos saber quais sequências estão associadas a cada amostras.  Para isso, utilizaremos as informações do `sample-metadata.tsv` ###########
+Agora, precisamos saber quais sequências estão associadas a cada amostras.  Para isso, utilizaremos as informações do `sample-metadata.tsv`, este arquivo está em `outros_dados`
 
 ```
 qiime demux emp-single \
@@ -54,7 +59,7 @@ Pronto! Seus dados estão prontos para serem Analisados!!
 
 
 # DADA2
-Aqui, utilizaremos o DADA2 ***falar mais coisas do DADA
+Aqui, utilizaremos o DADA2, existem outros "denoisers" que vou explicar nos slides
 
 ```
 qiime dada2 denoise-single \

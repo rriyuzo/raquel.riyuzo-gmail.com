@@ -38,7 +38,7 @@ qiime tools import \
   --input-path sequences \
   --output-path sequences.qza
 ```
-Agora, precisamos saber quais sequências estão associadas a cada amostras.  Para isso, utilizaremos as informações do `sample-metadata.tsv`, este arquivo está em `outros_dados`
+Agora, precisamos saber quais sequências estão associadas a cada amostra.  Para isso, utilizaremos as informações do `sample-metadata.tsv`, este arquivo está em `outros_dados`
 
 ```
 qiime demux emp-single \
@@ -71,16 +71,30 @@ qiime dada2 denoise-single \
   --o-denoising-stats stats.qza
 ````
 
-Para Visualizar
-```
-qiime metadata tabulate --m-input-file stats-dada2.qza   --o-visualization stats-dada2.qzv
-```
-
 # Pausa para reflexão
 *Importância da qualidade de sequenciamento. `fastqc`
 *Tipos de importação
 
+
+Para Visualizar
+```
+qiime feature-table tabulate-seqs \
+  --i-data rep-seqs.qza \
+  --o-visualization rep-seqs.qzv
+  
+qiime feature-table summarize \
+  --i-table table.qza \
+  --o-visualization table.qzv \
+  --m-sample-metadata-file sample-metadata.tsv  
+
+qiime metadata tabulate \
+--m-input-file stats.qza \
+--o-visualization stats.qzv
+```
+
 # Geração de árvore filogenética
+O QIIME suporta várias métricas de diversidade filogenética, por exemplo UniFrac. Essas métricas requerem uma árvore filogenética enraizada que relacione os recursos entre si. Para gerar uma árvore filogenética, usaremos o `align-to-tree-mafft-fasttree`.
+
 ```
 qiime phylogeny align-to-tree-mafft-fasttree \
   --i-sequences rep-seqs.qza \
@@ -116,7 +130,8 @@ qiime feature-table core-features --i-table table.qza --o-visualization CORE/cor
 ```
 
 # Diversidade
-###escrever algo
+Um conjunto de análises de diversidade está disponível no plugin `q2-diversity`, primeiro utilizaremos o `diversity core-metrics-phylogenetic`, que irá gerar um diretório com um série de análises de diversidade. 
+
 ```
 qiime diversity core-metrics-phylogenetic \
   --i-phylogeny rooted-tree.qza \
@@ -127,7 +142,7 @@ qiime diversity core-metrics-phylogenetic \
 
 ```
 
-##escrever algo
+Em seguida, vamos explorar a alfa diversidade com `diversity alpha-group-significance`.
 
 ```
 qiime diversity alpha-group-significance \
@@ -164,9 +179,10 @@ qiime feature-table filter-samples \
 ````
 
 # Estatística
-#####escrever algo
+
 PERMANOVA
-##escrever algo
+Os comandos a seguir testarão se as distâncias entre amostras dentro de um grupo, como amostras do mesmo local do corpo (por exemplo, intestino), são mais semelhantes entre si do que amostras de outros grupos.
+
 ```
 qiime diversity beta-group-significance \
   --i-distance-matrix diversity-results/unweighted_unifrac_distance_matrix.qza \
@@ -184,7 +200,8 @@ qiime diversity beta-group-significance \
 ```
 
 ANCON
-#escrever algo
+O ANCOM pode ser aplicado para identificar características que são diferencialmente abundantes nos grupos de amostras.
+
 ````
 qiime composition add-pseudocount \
   --i-table gut-table.qza \
